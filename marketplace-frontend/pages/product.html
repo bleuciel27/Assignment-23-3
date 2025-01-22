@@ -425,12 +425,31 @@
     </div>
 
     <script>
-        const API_URL = 'http://localhost:8000/api';
+        const API_URL = 'https://sparta-market.onrender.com/api';
         let currentProduct = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             loadProducts();
         });
+
+        function getOptimizedImageUrl(url) {
+            if (!url) return '/placeholder.jpg';
+            
+            try {
+                // Ensure HTTPS
+                url = url.replace('http://', 'https://');
+                
+                // Add Cloudinary transformations if needed
+                if (url.includes('cloudinary.com')) {
+                    return url.replace('/image/upload/', '/image/upload/c_fill,w_800,h_600,q_auto/');
+                }
+                
+                return url;
+            } catch (error) {
+                console.error('Error processing image URL:', error);
+                return '/placeholder.jpg';
+            }
+        }
 
         async function loadProducts() {
             try {
@@ -494,7 +513,14 @@
             const productGrid = document.getElementById('productGrid');
             productGrid.innerHTML = products.map(product => `
                 <div class="product-card" onclick="showProductDetail(${product.id})">
-                    <img src="${product.image}" alt="${product.title}" class="product-image">
+                    <img 
+                        src="${getOptimizedImageUrl(product.image)}" 
+                        alt="${product.title}" 
+                        class="product-image"
+                        onerror="this.src='/placeholder.jpg'; this.classList.remove('loading')"
+                        onload="this.classList.remove('loading')"
+                        loading="lazy"
+                    >
                     <div class="product-info">
                         <h3 class="product-title">${product.title}</h3>
                         <div class="product-price">$${parseFloat(product.price).toFixed(2)}</div>
@@ -649,10 +675,19 @@
         // Add image preview functionality
         document.getElementById('image').addEventListener('change', function(event) {
             const file = event.target.files[0];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            const preview = document.getElementById('imagePreview');
+            
             if (file) {
+                if (file.size > maxSize) {
+                    alert('Image size should be less than 5MB');
+                    event.target.value = '';
+                    preview.innerHTML = '';
+                    return;
+                }
+                
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const preview = document.getElementById('imagePreview');
                     preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
                 };
                 reader.readAsDataURL(file);
@@ -665,7 +700,7 @@
             const token = localStorage.getItem('token');
             if (!token) {
                 alert('Please log in to create a post');
-                window.location.href = './login.html';
+                window.location.href = './index.html';
                 return;
             }
         
