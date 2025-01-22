@@ -7,4 +7,4 @@ dj-database-url
 whitenoise
 gunicorn
 python-dotenv
-cloudinary
+cloudinary==1.36.0
