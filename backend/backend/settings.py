@@ -107,9 +107,15 @@ REST_FRAMEWORK = {
 }
 
 # Database configuration
-DATABASES= {
-    "ENGINE":"django.db.backends.sqlite3",
-    "NAME":BASE_DIR/"db.sqlite3",
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'sparta_store',
+        'USER': 'postgres',  # Change this to your PostgreSQL username
+        'PASSWORD': 'Tejraj@009',  # Change this to your PostgreSQL password
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
 DATABASES['default']= dj_database_url.parse("postgresql://djangodb_u1k9_user:OGey8KkdF4e7qWNDY2lfgLydF1dvaAtb@dpg-cu88jkij1k6c739rslgg-a/djangodb_u1k9")
