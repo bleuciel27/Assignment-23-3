@@ -127,7 +127,7 @@ else:
             'PORT': '5432',
         }
     }
-
+DATABASES['default']= dj_database_url.parse("postgresql://djangodb_u1k9_user:OGey8KkdF4e7qWNDY2lfgLydF1dvaAtb@dpg-cu88jkij1k6c739rslgg-a/djangodb_u1k9")
 # User model
 AUTH_USER_MODEL = 'users.User'
 
