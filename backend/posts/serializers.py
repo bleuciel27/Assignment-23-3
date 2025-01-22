@@ -18,7 +18,7 @@ class PostSerializer(serializers.ModelSerializer):
     is_liked = serializers.SerializerMethodField()
     comments = CommentSerializer(many=True, read_only=True)
     seller_username = serializers.CharField(source='seller.username', read_only=True)
-    image = serializers.SerializerMethodField()
+    image = serializers.ImageField(required=True)
     
     class Meta:
         model = Post
@@ -63,8 +63,17 @@ class PostSerializer(serializers.ModelSerializer):
             
         except Exception as e:
             logger.error(f"Error processing image for post {obj.id}: {str(e)}")
-            # Try to return direct URL as fallback
             if hasattr(obj.image, 'url'):
                 logger.info(f"Falling back to direct URL for post {obj.id}")
                 return obj.image.url
             return None
+
+    def create(self, validated_data):
+        logger.info("Creating new post with data: %s", validated_data)
+        try:
+            instance = super().create(validated_data)
+            logger.info("Successfully created post with ID: %s", instance.id)
+            return instance
+        except Exception as e:
+            logger.error("Error creating post: %s", str(e))
+            raise
