@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Post, Comment
+from cloudinary.utils import cloudinary_url
 
 class CommentSerializer(serializers.ModelSerializer):
     user_username = serializers.CharField(source='user.username', read_only=True)
@@ -23,7 +24,21 @@ class PostSerializer(serializers.ModelSerializer):
                 'comments', 'created_at')
         read_only_fields = ('seller',)
 
-    
+    def get_image(self, obj):
+        if obj.image and obj.image.public_id:
+            try:
+                url, _ = cloudinary_url(
+                    obj.image.public_id,
+                    format="jpg",
+                    crop="fill",
+                    width=800,
+                    quality="auto"
+                )
+                return url
+            except Exception:
+                return None if not obj.image.url else obj.image.url
+        return None
+
     def get_likes_count(self, obj):
         return obj.likes.count()
 
