@@ -54,7 +54,7 @@ CORS_ALLOWED_ORIGINS = [
 if RENDER_EXTERNAL_HOSTNAME:
     CORS_ALLOWED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
 
-CORS_ALLOW_ALL_ORIGINS = False  # Set to False in production
+CORS_ALLOW_ALL_ORIGINS = True  # Set to False in production
 
 ROOT_URLCONF = "backend.urls"
 
@@ -112,7 +112,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'sparta_store',
         'USER': 'postgres',  # Change this to your PostgreSQL username
-        'PASSWORD': 'Tejraj@009',  # Change this to your PostgreSQL password
+        'PASSWORD': '',  # Change this to your PostgreSQL password
         'HOST': 'localhost',
         'PORT': '5432',
     }
