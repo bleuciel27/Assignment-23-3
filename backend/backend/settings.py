@@ -107,26 +107,11 @@ REST_FRAMEWORK = {
 }
 
 # Database configuration
-DATABASE_URL = os.environ.get('DATABASE_URL')
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
-        )
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DATABASE_NAME', 'sparta_store'),
-            'USER': os.environ.get('DATABASE_USER', 'postgres'),
-            'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'PASSWORD'),
-            'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
-            'PORT': '5432',
-        }
-    }
+DATABASES= {
+    "ENGINE":"django.db.backends.sqlite3",
+    "NAME":BASE_DIR/"db.sqlite3",
+}
+
 DATABASES['default']= dj_database_url.parse("postgresql://djangodb_u1k9_user:OGey8KkdF4e7qWNDY2lfgLydF1dvaAtb@dpg-cu88jkij1k6c739rslgg-a/djangodb_u1k9")
 # User model
 AUTH_USER_MODEL = 'users.User'
