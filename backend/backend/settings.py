@@ -47,7 +47,7 @@ MIDDLEWARE = [
 ]
 
 cloudinary.config(
-    cloud_name = 'database',
+    cloud_name = 'dzoaapc3v',
     api_key = '867342785338786', 
     api_secret = 'C2AOz_mxSF8amJSKJj712UuVB78'
 )
