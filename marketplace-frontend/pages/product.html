@@ -433,23 +433,26 @@
         });
 
         function getOptimizedImageUrl(url) {
-            if (!url) return '/placeholder.jpg';
-            
-            try {
-                // Ensure HTTPS
-                url = url.replace('http://', 'https://');
-                
-                // Add Cloudinary transformations if needed
-                if (url.includes('cloudinary.com')) {
-                    return url.replace('/image/upload/', '/image/upload/c_fill,w_800,h_600,q_auto/');
-                }
-                
-                return url;
-            } catch (error) {
-                console.error('Error processing image URL:', error);
-                return '/placeholder.jpg';
+        if (!url) return '/placeholder.jpg';
+    
+        try {
+        // Handle Cloudinary URLs
+        if (url.includes('res.cloudinary.com')) {
+            // Extract the version and public ID
+            const parts = url.split('/upload/');
+            if (parts.length === 2) {
+                // Add optimization parameters
+                return `${parts[0]}/upload/c_fill,w_800,h_600,q_auto,f_auto/${parts[1]}`;
             }
         }
+        
+        // For non-Cloudinary URLs, ensure HTTPS
+        return url.startsWith('http') ? url.replace('http://', 'https://') : url;
+    } catch (error) {
+        console.error('Error processing image URL:', error);
+        return '/placeholder.jpg';
+    }
+}
 
         async function loadProducts() {
             try {
@@ -517,10 +520,9 @@
                         src="${getOptimizedImageUrl(product.image)}" 
                         alt="${product.title}" 
                         class="product-image"
-                        onerror="this.src='/placeholder.jpg'; this.classList.remove('loading')"
-                        onload="this.classList.remove('loading')"
+                        onerror="this.src='/placeholder.jpg'"
                         loading="lazy"
-                    >
+                        >
                     <div class="product-info">
                         <h3 class="product-title">${product.title}</h3>
                         <div class="product-price">$${parseFloat(product.price).toFixed(2)}</div>
