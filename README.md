@@ -6,7 +6,7 @@
 
 ## Step 1: Setup Python Environment
 1. Install Python if not already installed
-   - Download from: https://www.python.org/downloads/
+   - Download from: https://www.python.org/downloads/ 
    - Verify installation: `python --version`
 
 2. Create a virtual environment:
